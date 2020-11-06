@@ -17,11 +17,25 @@ before_script:
   - composer update
   - mysql -e 'CREATE DATABASE IF NOT EXISTS dbtest;'
   - mysql -e 'SHOW DATABASES;'
+  - mkdir -p packages/file-manager
+  - ls
+  - rsync -a --exclude 'packages' *  packages/file-manager
+  - rm -r !("packages"|"vendor"|"travis")
+  - ls
   - cp -R ./vendor/laravel/laravel/* .
   - cp .env.example .env
-  - cp -R ./.travis/database.php ./config/database.php
-  - pwd
-  - php artisan migrate
+  - ls -la
+  - cp -R ./travis/database.php ./config/database.php
+  - cp -R ./travis/composer.json .
+  - cp -R ./travis/config .
+#  - cat ./composer.json
+  - cp -R ./travis/phpunit.xml .
+  - composer dumpautoload
+  - composer update
+  - cat ./phpunit.xml
+#  - php artisan route:list
+#  - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer update --prefer-dist
+#  - php artisan migrate
 #  - composer dump-autoload --no-scripts
 #  - sed -i 's|name="DB_HOST" value="dbtest"|name="DB_HOST" value="127.0.0.1"|g' phpunit.xml
 #  - sed -i 's|name="DB_DATABASE" value="dbtest"|name="DB_DATABASE" value="dbtest"|g' phpunit.xml
@@ -30,6 +44,8 @@ before_script:
 #  - sed -i 's|name="DB_CONNECTION" value="dbtest"|name="DB_CONNECTION" value="mysql"|g' phpunit.xml
 #  - cat phpunit.xml
 #  - cat .env
+#  - ls
+
 
 script:
-  - vendor/bin/phpunit --configuration phpunit.xml
+#  - vendor/bin/phpunit --configuration phpunit.xml
